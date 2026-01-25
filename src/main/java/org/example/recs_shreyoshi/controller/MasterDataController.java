@@ -1,0 +1,108 @@
+package org.example.recs_shreyoshi.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.example.recs_shreyoshi.dto.*;
+import org.example.recs_shreyoshi.models.MasterData;
+import org.example.recs_shreyoshi.repositories.MasterDataRepository;
+import org.example.recs_shreyoshi.services.AreaService;
+import org.example.recs_shreyoshi.services.CashbackService;
+import org.example.recs_shreyoshi.services.MasterDataService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+@RestController
+@RequestMapping("/api/master-data")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3001")
+public class MasterDataController {
+
+    private final MasterDataRepository repo;
+    private final MasterDataService masterDataService;
+    private final AreaService areaService;
+    private final CashbackService  cashbackService;
+
+    @GetMapping
+    public List<MasterData> getAll() {
+        return repo.findAll();
+    }
+
+    @GetMapping("/masterData")
+    public MasterData getMasterData(@RequestParam(required = false) Long id,
+                                @RequestParam(required = false) String name) {
+        if (id != null) {
+            return masterDataService.getMasterDataById(id);
+        } else if (name != null) {
+            return masterDataService.getMasterDataByName(name);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Either id or name must be provided");
+        }
+    }
+//    @PostMapping("/customer/submit")
+//    public MasterData saveCustomerForm(
+//            @PathVariable Long masterId,
+//            @RequestBody CustomerFormDTO dto
+//    ) {
+//        return masterDataService.saveCustomerForm(masterId, dto);
+//    }
+
+//    @GetMapping("/by-next-due")
+//    public List<MasterData> getByNextDue(
+//            @RequestParam(required = true) String maxDueDate
+//    ) {
+//        LocalDate date = LocalDate.parse(maxDueDate);
+//        return masterDataService.getMasterDataByNextDueDate(date);
+//    }
+
+    @PutMapping("/{id}")
+    public MasterData updateMasterData(@PathVariable Long id, @RequestBody MasterData masterData) {
+        return masterDataService.updateMasterData(id, masterData);
+    }
+
+//    @PostMapping("/master-data/excel-csv")
+//    public ResponseEntity<?> uploadExcel(@RequestParam("file") MultipartFile file) {
+//
+//        if (file.isEmpty()) {
+//            return ResponseEntity.badRequest().body("CSV file is empty");
+//        }
+//
+//        List<MasterData> rows = masterDataService.readExcel(file);
+//        masterDataService.importExcel(rows);
+//
+//        return ResponseEntity.ok("Master data uploaded successfully");
+//    }
+
+
+    @PostMapping
+    public MasterData create(@RequestBody MasterData masterData) {
+        return masterDataService.create(masterData);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        masterDataService.delete(id);
+    }
+    @GetMapping("/consumers")
+    public List<ConsumerView> consumers() {
+        return repo.getConsumers();
+    }
+
+
+    @GetMapping("/payments")
+    public List<PaymentView> payments() {
+        return repo.getPayments();
+    }
+
+    @GetMapping("/purchases")
+    public List<PurchaseView> purchases() {
+        return repo.getPurchases();
+    }
+
+    @GetMapping("/summary")
+    public OverallSummary summary() {
+        return repo.getSummary();
+    }
+
+
+}
