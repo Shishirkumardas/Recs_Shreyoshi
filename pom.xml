@@ -11,7 +11,7 @@
     <groupId>org.example</groupId>
     <artifactId>Recs_Shreyoshi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>Recs_Shreyoshi</name>
     <description>Recs_Shreyoshi</description>
     <url/>
