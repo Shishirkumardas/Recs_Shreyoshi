@@ -22,14 +22,6 @@ public class ProductController {
         return productService.saveProduct(product);
     }
 
-//    @GetMapping
-//    public List<Product> getProducts(@RequestParam(required = false) String category) {
-//        if (category != null) {
-//            return productRepository.findByCategory(category); // Assume category is String now, adjust model if needed
-//        }
-//        return productRepository.findAll();
-//    }
-
     @GetMapping
     public List<Product> getProducts(
             @RequestParam(required = false) String category,
